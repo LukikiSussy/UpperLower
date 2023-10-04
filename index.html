@@ -12,16 +12,23 @@
 
     const LETTERS = "abcdefghijklmnopqrstuvwxyz";
 
+    running = false;
+
     function convert() {
+
+        if(running) return;
+        running = true;
+
         textArea = document.getElementById("input");
         text = textArea.value;
-
         var radio = document.getElementsByName("text");
-        if(radio[0].checked) textArea.value = text.toUpperCase();
-        else if(radio[1].checked) textArea.value = text.toLowerCase();
+
+        var returnText = ""
+
+        if(radio[0].checked) returnText = text.toUpperCase();
+        else if(radio[1].checked) returnText = text.toLowerCase();
         else {
             var textArr = text.split("");
-            var returnText = ""
             for(const letter of textArr) {
                 if (!/^[a-z]$/i.test(letter)) {
                     returnText += letter;
@@ -32,9 +39,28 @@
                                 ?(LETTERS[(index + 1) % LETTERS.length])
                                 :((LETTERS[(index + 1) % LETTERS.length]).toUpperCase());
             }
-
-            textArea.value = returnText;
         }
+
+        let i = 0;
+        var interval = setInterval(() => {
+
+            if(i > returnText.length) {
+                clearInterval(interval);
+
+                running = false;
+            }
+
+            var temp = ""
+            returnText.split("").forEach((element, index) => {
+                if (index < i) {
+                    temp += element;
+
+                    textArea.value = temp;
+                }
+            });
+
+            i++;
+        }, 50);
     }
  
     </script>
