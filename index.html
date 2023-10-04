@@ -10,13 +10,31 @@
  
     <script> 
 
+    const LETTERS = "abcdefghijklmnopqrstuvwxyz";
+
     function convert() {
         textArea = document.getElementById("input");
         text = textArea.value;
 
         var radio = document.getElementsByName("text");
         if(radio[0].checked) textArea.value = text.toUpperCase();
-        else textArea.value = text.toLowerCase();
+        else if(radio[1].checked) textArea.value = text.toLowerCase();
+        else {
+            var textArr = text.split("");
+            var returnText = ""
+            for(const letter of textArr) {
+                if (!/^[a-z]$/i.test(letter)) {
+                    returnText += letter;
+                    continue;
+                }
+                var index = letter.toLowerCase().charCodeAt(0) - 97;
+                returnText += letter.toLowerCase()==letter 
+                                ?(LETTERS[(index + 1) % LETTERS.length])
+                                :((LETTERS[(index + 1) % LETTERS.length]).toUpperCase());
+            }
+
+            textArea.value = returnText;
+        }
     }
  
     </script>
@@ -32,6 +50,9 @@
     <label for="upper">Upper Case</label><br>
     <input type="radio" id="lower" name="text" value="Lower Case" onclick=convert()>
     <label for="lower">Lower Case</label><br>
+    <input type="radio" id="caesar" name="text" value="Caesar" onclick=convert()>
+    <label for="lower">Caesar</label><br>
+
  
 </body>
 </html>
